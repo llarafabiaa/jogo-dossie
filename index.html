@@ -1,0 +1,2725 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dossiê Pericial: Quem Matou o Bom Design?</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ======================================================================
+         HUD SUPERIOR FIXO: EQUIPE, REPUTAÇÃO E CRONÔMETRO (100:00)
+         ====================================================================== -->
+    <header>
+      <div class="team-hud">
+        <span class="status-dot"></span>
+        <span id="hud-team-display">EQUIPE: AGUARDANDO REGISTRO</span>
+      </div>
+
+      <div class="hud-metrics">
+        <div
+          class="reputation-box"
+          title="Reputação Pericial (deduz 5% a cada erro ou pedido de dica)"
+        >
+          <span>REPUTAÇÃO:</span>
+          <span id="reputation-score">100%</span>
+          <div class="rep-bar-mini">
+            <div class="rep-bar-mini-fill" id="reputation-bar"></div>
+          </div>
+        </div>
+
+        <div class="timer-box">
+          <span class="timer-display" id="timer-display">100:00</span>
+          <button
+            type="button"
+            class="btn-mini"
+            id="btn-toggle-timer"
+            title="Pausar/Retomar"
+          >
+            PAUSAR
+          </button>
+          <button
+            type="button"
+            class="btn-mini"
+            id="btn-reset-timer"
+            title="Reiniciar 100 min"
+          >
+            RESET
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================================================================
+         SHELL PRINCIPAL: RASTREADOR LATERAL + TELAS DAS 7 FASES
+         ====================================================================== -->
+    <div class="app-shell">
+      <aside class="sidebar-nav" aria-label="Navegação das Fases">
+        <div class="sidebar-title">DOSSIÊ DE INVESTIGAÇÃO</div>
+
+        <button
+          type="button"
+          class="nav-item unlocked active"
+          id="nav-0"
+          onclick="navigateIfUnlocked(0)"
+        >
+          <span>00. Briefing Inicial</span>
+          <span class="nav-badge">ABERTO</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-1"
+          onclick="navigateIfUnlocked(1)"
+        >
+          <span>01. Arqueologia (8 Obras)</span>
+          <span class="nav-badge" id="badge-1">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-2"
+          onclick="navigateIfUnlocked(2)"
+        >
+          <span>02. Manifestos (5 Lacunas)</span>
+          <span class="nav-badge" id="badge-2">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-3"
+          onclick="navigateIfUnlocked(3)"
+        >
+          <span>03. Raio-X Affinity/Figma</span>
+          <span class="nav-badge" id="badge-3">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-4"
+          onclick="navigateIfUnlocked(4)"
+        >
+          <span>04. Perícia Grid/Software</span>
+          <span class="nav-badge" id="badge-4">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-5"
+          onclick="navigateIfUnlocked(5)"
+        >
+          <span>05. Dossiê Brasil</span>
+          <span class="nav-badge" id="badge-5">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-6"
+          onclick="navigateIfUnlocked(6)"
+        >
+          <span>06. Autópsia Forense</span>
+          <span class="nav-badge" id="badge-6">🔒</span>
+        </button>
+        <button
+          type="button"
+          class="nav-item"
+          id="nav-7"
+          onclick="navigateIfUnlocked(7)"
+        >
+          <span>07. Tribunal &amp; Laudo</span>
+          <span class="nav-badge" id="badge-7">🔒</span>
+        </button>
+
+        <div class="sidebar-keys-box">
+          <strong>CHAVES DESBLOQUEADAS:</strong>
+          <div id="unlocked-keys-list">Nenhuma chave coletada ainda.</div>
+        </div>
+      </aside>
+
+      <main>
+        <!-- ==============================================================
+                 TELA 0: BRIEFING INICIAL E REGISTRO DA EQUIPE
+                 ============================================================== -->
+        <section class="screen active" id="screen-0">
+          <div class="dossier-panel">
+            <span class="stamp">CONFIDENCIAL // FORÇA-TAREFA DE DESIGN</span>
+            <h1>QUEM MATOU O BOM DESIGN?</h1>
+            <p class="subtitle">
+              Dossiê Pericial Interativo • 1º Ano do Ensino Médio • Duração: 2
+              Aulas (100 min)
+            </p>
+
+            <div class="synopsis-box">
+              <p style="margin-bottom: 0.75rem">
+                <strong>O CASO:</strong> O "Bom Design" — aquele comprometido
+                com a clareza, a função social, a ética e a dignidade humana —
+                foi encontrado asfixiado sob pilhas de poluição visual,
+                propaganda enganosa e consumo descartável.
+              </p>
+              <p>
+                <strong>SUA MISSÃO:</strong> Ao longo de
+                <strong>7 Fases Investigativas</strong>, sua equipe irá analisar
+                obras históricas, decifrar manifestos, executar
+                <strong>perícias técnicas reais no Affinity ou Figma</strong> e
+                autopsiar campanhas fraudulentas para emitir o Laudo Pericial
+                Oficial. Cada erro ou pedido de dica reduz em
+                <strong>5%</strong> a Reputação da equipe.
+              </p>
+            </div>
+
+            <div class="input-group">
+              <label for="team-name-input"
+                >Identificação da Equipe (Nome da Equipe e Integrantes):</label
+              >
+              <input
+                type="text"
+                id="team-name-input"
+                placeholder="Ex.: Peritos da Bauhaus — Ana, Lucas e Pedro"
+                autocomplete="off"
+              />
+              <div class="inline-error-msg" id="team-error-msg">
+                ⚠ Por favor, preencha o nome da equipe e dos integrantes antes
+                de abrir o dossiê.
+              </div>
+            </div>
+
+            <button type="button" class="btn-primary" id="btn-start-game">
+              INICIAR INVESTIGAÇÃO (100:00)
+            </button>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 1: FASE 1 - ARQUEOLOGIA VISUAL (8 OBRAS EM ORDEM CRONOLÓGICA)
+                 ============================================================== -->
+        <section class="screen" id="screen-1">
+          <div class="dossier-panel">
+            <span class="stamp">FASE 01 // ARQUEOLOGIA VISUAL</span>
+            <h2>LINHA DO TEMPO DAS VANGUARDAS E MOVIMENTOS (8 OBRAS)</h2>
+            <p class="subtitle">
+              Clique em cada uma das <strong>8 evidências</strong> abaixo para
+              ampliar a obra, ler sua data histórica e coletar o dígito
+              identificador. Depois, digite os 8 dígitos
+              <strong
+                >do movimento mais antigo (1883) ao mais recente (1981)</strong
+              >.
+            </p>
+
+            <div class="evidence-grid">
+              <div
+                class="evidence-card"
+                id="card-ev-A"
+                onclick="openEvidenceModal('A')"
+              >
+                <span class="tag">EVIDÊNCIA A</span>
+                <div class="evidence-thumb" id="thumb-ev-A"></div>
+                <h3>Arts &amp; Crafts</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-B"
+                onclick="openEvidenceModal('B')"
+              >
+                <span class="tag">EVIDÊNCIA B</span>
+                <div class="evidence-thumb" id="thumb-ev-B"></div>
+                <h3>Art Nouveau</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-C"
+                onclick="openEvidenceModal('C')"
+              >
+                <span class="tag">EVIDÊNCIA C</span>
+                <div class="evidence-thumb" id="thumb-ev-C"></div>
+                <h3>Construtivismo</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-D"
+                onclick="openEvidenceModal('D')"
+              >
+                <span class="tag">EVIDÊNCIA D</span>
+                <div class="evidence-thumb" id="thumb-ev-D"></div>
+                <h3>Bauhaus Weimar</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-E"
+                onclick="openEvidenceModal('E')"
+              >
+                <span class="tag">EVIDÊNCIA E</span>
+                <div class="evidence-thumb" id="thumb-ev-E"></div>
+                <h3>Dadaísmo</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-F"
+                onclick="openEvidenceModal('F')"
+              >
+                <span class="tag">EVIDÊNCIA F</span>
+                <div class="evidence-thumb" id="thumb-ev-F"></div>
+                <h3>De Stijl</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-G"
+                onclick="openEvidenceModal('G')"
+              >
+                <span class="tag">EVIDÊNCIA G</span>
+                <div class="evidence-thumb" id="thumb-ev-G"></div>
+                <h3>Pop Art</h3>
+                <span>Clique para ampliar</span>
+              </div>
+
+              <div
+                class="evidence-card"
+                id="card-ev-H"
+                onclick="openEvidenceModal('H')"
+              >
+                <span class="tag">EVIDÊNCIA H</span>
+                <div class="evidence-thumb" id="thumb-ev-H"></div>
+                <h3>Grupo Memphis</h3>
+                <span>Clique para ampliar</span>
+              </div>
+            </div>
+
+            <div class="hint-bar">
+              <span id="hint-text-1"
+                >Dica bloqueada. Precisa de ajuda com a ordem cronológica das 8
+                obras?</span
+              >
+              <button
+                type="button"
+                class="btn-hint"
+                onclick="
+                  buyHint(
+                    1,
+                    'Ordem cronológica: A (1883) → B (1896) → E (1919) → C (1919-20) → F (1921) → D (1923) → G (1962) → H (1981). Código: 74285391.',
+                  )
+                "
+              >
+                PEDIR DICA (-5%)
+              </button>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-1"
+                  >Código Cronológico de 8 Dígitos (Mais Antigo → Mais
+                  Recente):</label
+                >
+                <input
+                  type="text"
+                  id="pass-phase-1"
+                  maxlength="8"
+                  placeholder="Ex.: 00000000"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase1()">
+                DESBLOQUEAR FASE 02
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 2: FASE 2 - INTERROGATÓRIO DOS MANIFESTOS CRUZADOS (5 LACUNAS)
+                 ============================================================== -->
+        <section class="screen" id="screen-2">
+          <div class="dossier-panel">
+            <span class="stamp">FASE 02 // MANIFESTOS CRUZADOS</span>
+            <h2>INTERROGATÓRIO DOS MANIFESTOS HISTÓRICOS</h2>
+            <p class="subtitle">
+              Complete as <strong>5 lacunas conceituais</strong> nos documentos
+              originais abaixo usando o Banco de Conceitos para liberar a Chave
+              Mestra da Fase 2.
+            </p>
+
+            <div class="word-bank">
+              <strong>BANCO DE CONCEITOS:</strong>
+              <span>ALIENAÇÃO</span>
+              <span>PROLETARIADO</span>
+              <span>FUNÇÃO</span>
+              <span>GRID</span>
+              <span>SEMIÓTICA</span>
+              <span>ORNAMENTO</span>
+              <span>LUXO</span>
+            </div>
+
+            <div class="manifesto-grid">
+              <div
+                class="typewriter-sheet"
+                data-header="DOC. 01 // ARTS & CRAFTS (WILLIAM MORRIS, 1888)"
+              >
+                <p>
+                  "A máquina industrial separou o criador de sua obra, gerando a
+                  <span class="blank-slot">[LACUNA 01]</span> do trabalhador
+                  fabril. Precisamos devolver dignidade ao ofício humano."
+                </p>
+                <div class="sheet-input-wrap">
+                  <label for="gap-1">Preencher Lacuna 01:</label>
+                  <input
+                    type="text"
+                    id="gap-1"
+                    placeholder="Conceito 01"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="typewriter-sheet"
+                data-header="DOC. 02 // CONSTRUTIVISMO RUSSO (RODCHENKO, 1921)"
+              >
+                <p>
+                  "Abaixo a arte burguesa de salão! O design gráfico deve ser
+                  uma ferramenta revolucionária de educação e agitação para o
+                  <span class="blank-slot">[LACUNA 02]</span>."
+                </p>
+                <div class="sheet-input-wrap">
+                  <label for="gap-2">Preencher Lacuna 02:</label>
+                  <input
+                    type="text"
+                    id="gap-2"
+                    placeholder="Conceito 02"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="typewriter-sheet"
+                data-header="DOC. 03 // BAUHAUS & FUNCIONALISMO (GROPIUS, 1923)"
+              >
+                <p>
+                  "Um objeto ou cartaz é determinado pela sua essência prática:
+                  a forma deve seguir sempre a sua
+                  <span class="blank-slot">[LACUNA 03]</span>, eliminando o
+                  excesso."
+                </p>
+                <div class="sheet-input-wrap">
+                  <label for="gap-3">Preencher Lacuna 03:</label>
+                  <input
+                    type="text"
+                    id="gap-3"
+                    placeholder="Conceito 03"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="typewriter-sheet"
+                data-header="DOC. 04 // ESTILO TIPOGRÁFICO SUÍÇO (MÜLLER-BROCKMANN, 1958)"
+              >
+                <p>
+                  "A organização matemática e objetiva da página por meio de um
+                  <span class="blank-slot">[LACUNA 04]</span> modular garante
+                  clareza democrática na comunicação."
+                </p>
+                <div class="sheet-input-wrap">
+                  <label for="gap-4">Preencher Lacuna 04:</label>
+                  <input
+                    type="text"
+                    id="gap-4"
+                    placeholder="Conceito 04"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="typewriter-sheet"
+                data-header="DOC. 05 // ESCOLA DE ULM (MAX BENSE / MALDONADO, 1955)"
+              >
+                <p>
+                  "O design não é mera intuição artística, mas metodologia
+                  científica baseada na teoria da informação e na
+                  <span class="blank-slot">[LACUNA 05]</span> dos signos."
+                </p>
+                <div class="sheet-input-wrap">
+                  <label for="gap-5">Preencher Lacuna 05:</label>
+                  <input
+                    type="text"
+                    id="gap-5"
+                    placeholder="Conceito 05"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 1rem">
+              <button
+                type="button"
+                class="btn-primary btn-amber"
+                onclick="validateManifestoGaps()"
+              >
+                VERIFICAR 5 LACUNAS &amp; REVELAR CHAVE MESTRA
+              </button>
+            </div>
+
+            <div class="revealed-banner" id="phase2-master-banner">
+              <strong>MANIFESTOS DECIFRADOS COM SUCESSO!</strong><br />
+              Chave Mestra revelada para a Perícia Prática:
+              <span
+                style="color: #fde047; font-size: 1.15rem; font-weight: bold"
+                >DIALÉTICA</span
+              >
+            </div>
+
+            <div class="hint-bar">
+              <span id="hint-text-2"
+                >Dica bloqueada. Precisa de ajuda com as 5 lacunas dos
+                manifestos?</span
+              >
+              <button
+                type="button"
+                class="btn-hint"
+                onclick="
+                  buyHint(
+                    2,
+                    'Lacunas: 1-ALIENAÇÃO | 2-PROLETARIADO | 3-FUNÇÃO | 4-GRID | 5-SEMIÓTICA. Chave Mestra: DIALÉTICA.',
+                  )
+                "
+              >
+                PEDIR DICA (-5%)
+              </button>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-2">Chave Mestra da Fase 2:</label>
+                <input
+                  type="text"
+                  id="pass-phase-2"
+                  placeholder="Digite a Chave Mestra..."
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase2()">
+                DESBLOQUEAR FASE 03
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 3: FASE 3 - RAIO-X FORENSE AVANÇADO NO AFFINITY / FIGMA
+                 ============================================================== -->
+        <section class="screen" id="screen-3">
+          <div class="dossier-panel">
+            <span class="stamp"
+              >FASE 03 // PERÍCIA AVANÇADA NO AFFINITY OU FIGMA</span
+            >
+            <h2>OPERAÇÃO DESCRIPTOGRAFIA DE CAMADAS E TRANSFORMAÇÃO</h2>
+            <p class="subtitle">
+              O falsificador escondeu a pista sob camadas de isca, camuflagem de
+              cor, baixa opacidade e rotação invertida. Vocês precisarão
+              manipular o painel <strong>Camadas</strong> e o painel
+              <strong>Transformar</strong> no <strong>Affinity</strong> ou
+              <strong>Figma</strong>.
+            </p>
+
+            <div class="software-mission-box">
+              <span class="software-badge"
+                >MISSÃO TÉCNICA AVANÇADA // LAYERS, OPACIDADE, COR E ROTAÇÃO
+                180°</span
+              >
+              <h3
+                style="
+                  font-family: var(--font-mono);
+                  color: #ffffff;
+                  font-size: 1.02rem;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                PROCEDIMENTO DE DESCRIPTOGRAFIA NO SOFTWARE:
+              </h3>
+              <ol class="software-steps">
+                <li>
+                  Baixe o arquivo vetorial
+                  <strong><code>evidencia_fase3_camadas.svg</code></strong>
+                  abaixo e abra-o no <strong>Affinity</strong> ou
+                  <strong>Figma</strong>.
+                </li>
+                <li>
+                  No painel <strong>Camadas (Layers)</strong>, tome cuidado:
+                  existe uma camada chamada
+                  <strong><code>ISCA_01_FALSO_CODIGO</code></strong> com uma
+                  senha falsa! Desligue (oculte) todas as camadas superiores de
+                  bloqueio e iscas até isolar o grupo
+                  <strong><code>MANIFESTO_OCULTO</code></strong
+                  >.
+                </li>
+                <li>
+                  Selecione o grupo
+                  <strong><code>MANIFESTO_OCULTO</code></strong> e aumente sua
+                  <strong>Opacidade de 6% para 100%</strong>.
+                </li>
+                <li>
+                  Dentro dele, há um texto camuflado na mesma cor do fundo
+                  (<code>#1e293b</code>): mude a
+                  <strong>cor de preenchimento (Fill)</strong> para branco ou
+                  amarelo para torná-lo legível.
+                </li>
+                <li>
+                  Por fim, selecione o bloco da senha que está de cabeça para
+                  baixo e aplique <strong>Rotação de 180°</strong> no painel
+                  <em>Transformar (Transform)</em> para ler o código real.
+                </li>
+              </ol>
+
+              <button
+                type="button"
+                class="btn-primary btn-cyan"
+                onclick="downloadPhase3EvidenceSVG()"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                BAIXAR ARQUIVO AVANÇADO (evidencia_fase3_camadas.svg)
+              </button>
+            </div>
+
+            <div class="hint-bar">
+              <span id="hint-text-3"
+                >Dica bloqueada. Precisa de ajuda para desencriptar as camadas
+                no Affinity/Figma?</span
+              >
+              <button
+                type="button"
+                class="btn-hint"
+                onclick="
+                  buyHint(
+                    3,
+                    'Oculte BLOQUEIO_VERMELHO_PROPAGANDA e ISCA_01_FALSO_CODIGO (ignore BAUHAUS0000). Em MANIFESTO_OCULTO, suba a opacidade para 100%, mude a cor do texto e rotacione 180°. Senha real: ULM1953.',
+                  )
+                "
+              >
+                PEDIR DICA (-5%)
+              </button>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-3"
+                  >Código Real Desencriptado (Affinity/Figma):</label
+                >
+                <input
+                  type="text"
+                  id="pass-phase-3"
+                  placeholder="Ex.: ESCOLA0000"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase3()">
+                DESBLOQUEAR FASE 04
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 4: FASE 4 - ENGENHARIA REVERSA AVANÇADA NO AFFINITY / FIGMA
+                 ============================================================== -->
+        <section class="screen" id="screen-4">
+          <div class="dossier-panel">
+            <span class="stamp"
+              >FASE 04 // AUDITORIA TÉCNICA SEM RÓTULOS PRONTOS</span
+            >
+            <h2>ENGENHARIA REVERSA: AUDITORIA DE GRID, COR E TIPOGRAFIA</h2>
+            <p class="subtitle">
+              Desta vez o arquivo não contém nenhum número escrito no texto!
+              Você terá que remover camadas de ruído e usar o
+              <strong>painel de tipografia</strong>, o
+              <strong>conta-gotas (HEX)</strong> e a contagem de módulos no
+              <strong>Affinity</strong> ou <strong>Figma</strong>.
+            </p>
+
+            <div class="software-mission-box">
+              <span class="software-badge"
+                >MISSÃO DE AUDITORIA REAL // SEM TEXTOS INDICATIVOS NA
+                PRANCHETA</span
+              >
+              <ol class="software-steps">
+                <li>
+                  Baixe o arquivo
+                  <strong><code>evidencia_fase4_grid_suico.svg</code></strong>
+                  abaixo e abra-o no <strong>Affinity</strong> ou
+                  <strong>Figma</strong>.
+                </li>
+                <li>
+                  Oculte ou remova a camada
+                  <strong><code>RUIDO_SOBREPOSTO</code></strong> que está
+                  atrapalhando a leitura da prancheta.
+                </li>
+                <li>
+                  Selecione cada objeto individualmente e inspecione suas
+                  propriedades reais nos painéis do software para extrair os 4
+                  dígitos abaixo:
+                </li>
+              </ol>
+
+              <button
+                type="button"
+                class="btn-primary btn-cyan"
+                onclick="downloadPhase4EvidenceSVG()"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                BAIXAR ARQUIVO DE AUDITORIA (evidencia_fase4_grid_suico.svg)
+              </button>
+
+              <div class="specs-grid">
+                <div class="spec-card">
+                  <label for="spec-1">1º DÍGITO // COLUNAS DO GRID:</label>
+                  <p
+                    style="
+                      font-size: 0.82rem;
+                      color: var(--text-muted);
+                      margin-bottom: 0.5rem;
+                    "
+                  >
+                    Abra o grupo <code>GUIAS_GRID</code> no painel Camadas.
+                    Quantas colunas verticais estruturam esta grelha?
+                  </p>
+                  <input
+                    type="text"
+                    id="spec-1"
+                    maxlength="1"
+                    placeholder="1 dígito"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="spec-card">
+                  <label for="spec-2">2º DÍGITO // TAMANHO DA FONTE:</label>
+                  <p
+                    style="
+                      font-size: 0.82rem;
+                      color: var(--text-muted);
+                      margin-bottom: 0.5rem;
+                    "
+                  >
+                    Selecione o texto do título principal e olhe o painel
+                    Tipografia/Caractere. Qual o
+                    <strong>último dígito</strong> do tamanho da fonte?
+                  </p>
+                  <input
+                    type="text"
+                    id="spec-2"
+                    maxlength="1"
+                    placeholder="1 dígito"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="spec-card">
+                  <label for="spec-3">3º DÍGITO // CÓDIGO HEX DA COR:</label>
+                  <p
+                    style="
+                      font-size: 0.82rem;
+                      color: var(--text-muted);
+                      margin-bottom: 0.5rem;
+                    "
+                  >
+                    Use o <strong>Conta-gotas</strong> no retângulo azul-marinho
+                    central. Qual o <strong>último dígito</strong> do código HEX
+                    (<code>#1D355_</code>)?
+                  </p>
+                  <input
+                    type="text"
+                    id="spec-3"
+                    maxlength="1"
+                    placeholder="1 dígito"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="spec-card">
+                  <label for="spec-4">4º DÍGITO // MÓDULOS HORIZONTAIS:</label>
+                  <p
+                    style="
+                      font-size: 0.82rem;
+                      color: var(--text-muted);
+                      margin-bottom: 0.5rem;
+                    "
+                  >
+                    Abra o grupo <code>MODULOS_HORIZONTAIS</code>. Quantas
+                    faixas horizontais compõem a estrutura do cartaz?
+                  </p>
+                  <input
+                    type="text"
+                    id="spec-4"
+                    maxlength="1"
+                    placeholder="1 dígito"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div style="margin-top: 1.1rem">
+                <button
+                  type="button"
+                  class="btn-primary btn-amber"
+                  onclick="validateSoftwareSpecs()"
+                >
+                  COMPILAR AUDITORIA &amp; GERAR SENHA DA FASE 4
+                </button>
+              </div>
+
+              <div class="revealed-banner" id="phase4-password-banner">
+                <strong>AUDITORIA TÉCNICA VALIDADA!</strong><br />
+                Código de desbloqueio compilado:
+                <span
+                  style="color: #fde047; font-size: 1.2rem; font-weight: bold"
+                  >6475</span
+                >
+                (digite abaixo para abrir o Dossiê Brasil).
+              </div>
+            </div>
+
+            <div class="hint-bar">
+              <span id="hint-text-4"
+                >Dica bloqueada. Precisa de ajuda com a auditoria técnica no
+                Affinity/Figma?</span
+              >
+              <button
+                type="button"
+                class="btn-hint"
+                onclick="
+                  buyHint(
+                    4,
+                    '1º dígito: 6 colunas | 2º dígito: título em 84px (último dígito 4) | 3º dígito: HEX #1D3557 (último dígito 7) | 4º dígito: 5 faixas horizontais. Código: 6475.',
+                  )
+                "
+              >
+                PEDIR DICA (-5%)
+              </button>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-4"
+                  >Código Numérico de 4 Dígitos (Auditoria
+                  Affinity/Figma):</label
+                >
+                <input
+                  type="text"
+                  id="pass-phase-4"
+                  maxlength="4"
+                  placeholder="Ex.: 0000"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase4()">
+                DESBLOQUEAR FASE 05
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 5: FASE 5 - DOSSIÊ BRASIL: IDENTIDADE E RESISTÊNCIA
+                 ============================================================== -->
+        <section class="screen" id="screen-5">
+          <div class="dossier-panel">
+            <span class="stamp">FASE 05 // DOSSIÊ BRASIL</span>
+            <h2>IDENTIDADE E RESISTÊNCIA GRÁFICA NO BRASIL</h2>
+            <p class="subtitle">
+              Analise os
+              <strong>4 arquivos históricos brasileiros</strong> abaixo e
+              responda às 4 questões interpretativas para obter a senha da Fase
+              5.
+            </p>
+
+            <div class="brazil-grid">
+              <div class="brazil-card">
+                <h3>DOSSIÊ BR-01 // ESDI (1963)</h3>
+                <p>
+                  Fundada no Rio de Janeiro, a
+                  <strong>Escola Superior de Desenho Industrial (ESDI)</strong>
+                  trouxe ao Brasil a metodologia científica da Escola de Ulm e
+                  da Bauhaus, formando a primeira geração de designers modernos
+                  brasileiros com foco em projeto e indústria.
+                </p>
+              </div>
+
+              <div class="brazil-card">
+                <h3>DOSSIÊ BR-02 // ALOÍSIO MAGALHÃES</h3>
+                <p>
+                  Pioneiro da identidade visual no Brasil, criou marcos como o
+                  símbolo da <strong>Bienal de São Paulo</strong> e o primeiro
+                  padrão visual das cédulas do Cruzeiro Novo, defendendo o
+                  design ligado ao patrimônio cultural e ao desenvolvimento
+                  nacional.
+                </p>
+              </div>
+
+              <div class="brazil-card">
+                <h3>DOSSIÊ BR-03 // ROGÉRIO DUARTE &amp; TROPICÁLIA</h3>
+                <p>
+                  Durante a ditadura militar (1967–68), Rogério Duarte
+                  revolucionou o design gráfico brasileiro criando capas de
+                  discos (como Caetano Veloso e Gilberto Gil) e cartazes de
+                  cinema que subvertiam o grid rígido com ironia pop, colagem e
+                  crítica política.
+                </p>
+              </div>
+
+              <div class="brazil-card">
+                <h3>DOSSIÊ BR-04 // GRÁFICA POPULAR &amp; CORDEL</h3>
+                <p>
+                  Longe dos escritórios corporativos, o Brasil possui uma
+                  potência gráfica vernacular: a
+                  <strong>xilogravura da literatura de cordel</strong>, os
+                  cartazes lambe-lambe de rua e os abridores de letras dos
+                  barcos da Amazônia, que mantêm viva a memória popular.
+                </p>
+              </div>
+            </div>
+
+            <div class="brazil-quiz-panel">
+              <h3
+                style="
+                  font-family: var(--font-mono);
+                  color: var(--accent-amber);
+                  font-size: 0.98rem;
+                  margin-bottom: 1rem;
+                "
+              >
+                PERÍCIA HISTÓRICA — RESPONDA ÀS 4 QUESTÕES:
+              </h3>
+
+              <div class="quiz-question">
+                <p>
+                  1. Qual escola europeia inspirou diretamente a criação e o
+                  currículo da ESDI no Rio de Janeiro em 1963?
+                </p>
+                <select id="br-q1">
+                  <option value="">-- Selecione a resposta --</option>
+                  <option value="wrong1">
+                    Movimento Arts &amp; Crafts da Inglaterra Vitoriana
+                  </option>
+                  <option value="correct">
+                    Escola de Ulm (HfG) e a tradição funcionalista da Bauhaus
+                  </option>
+                  <option value="wrong2">
+                    Art Nouveau francês de Alphonse Mucha
+                  </option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  2. Como Rogério Duarte e o movimento Tropicalista utilizaram o
+                  design gráfico durante a ditadura militar?
+                </p>
+                <select id="br-q2">
+                  <option value="">-- Selecione a resposta --</option>
+                  <option value="wrong1">
+                    Copiaram fielmente a publicidade norte-americana sem
+                    críticas
+                  </option>
+                  <option value="wrong2">
+                    Defendiam que o design deveria ser estritamente neutro e
+                    apolítico
+                  </option>
+                  <option value="correct">
+                    Subverteram as regras formais com colagem, ironia e crítica
+                    cultural como forma de resistência
+                  </option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  3. Qual foi a grande contribuição de Aloísio Magalhães para o
+                  design brasileiro?
+                </p>
+                <select id="br-q3">
+                  <option value="">-- Selecione a resposta --</option>
+                  <option value="correct">
+                    Consolidou sistemas de identidade visual moderna integrados
+                    à cultura e ao patrimônio nacional
+                  </option>
+                  <option value="wrong1">
+                    Proibiu o uso de tipografia sem serifa no Brasil
+                  </option>
+                  <option value="wrong2">
+                    Substituiu toda a indústria gráfica pela produção manual de
+                    livros
+                  </option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  4. Por que a xilogravura de cordel e os letreiramentos
+                  populares (como os barcos da Amazônia) são fundamentais na
+                  história do design brasileiro?
+                </p>
+                <select id="br-q4">
+                  <option value="">-- Selecione a resposta --</option>
+                  <option value="wrong1">
+                    Porque são formas ultrapassadas sem valor comunicacional
+                  </option>
+                  <option value="correct">
+                    Porque expressam soluções gráficas autênticas, acessíveis e
+                    enraizadas na identidade cultural do povo
+                  </option>
+                  <option value="wrong2">
+                    Porque seguem exatamente as normas corporativas suíças
+                  </option>
+                </select>
+              </div>
+
+              <div style="margin-top: 1rem">
+                <button
+                  type="button"
+                  class="btn-primary btn-amber"
+                  onclick="validateBrazilQuiz()"
+                >
+                  VALIDAR DOSSIÊ BRASIL &amp; REVELAR CHAVE DA FASE 5
+                </button>
+              </div>
+
+              <div class="revealed-banner" id="phase5-password-banner">
+                <strong>DOSSIÊ BRASIL HOMOLOGADO!</strong><br />
+                Chave revelada para a Sala de Autópsia:
+                <span
+                  style="color: #fde047; font-size: 1.15rem; font-weight: bold"
+                  >TROPICÁLIA</span
+                >
+              </div>
+            </div>
+
+            <div class="hint-bar">
+              <span id="hint-text-5"
+                >Dica bloqueada. Precisa de ajuda nas questões sobre Design
+                Brasileiro?</span
+              >
+              <button
+                type="button"
+                class="btn-hint"
+                onclick="
+                  buyHint(
+                    5,
+                    '1: Escola de Ulm/Bauhaus | 2: Subversão com colagem/ironia | 3: Sistemas de identidade visual e patrimônio | 4: Soluções autênticas da cultura popular.',
+                  )
+                "
+              >
+                PEDIR DICA (-5%)
+              </button>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-5">Chave da Fase 5:</label>
+                <input
+                  type="text"
+                  id="pass-phase-5"
+                  placeholder="Digite a chave revelada..."
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase5()">
+                DESBLOQUEAR FASE 06
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 6: FASE 6 - AUTÓPSIA FORENSE: GREENWASHING (6 MIRAS)
+                 ============================================================== -->
+        <section class="screen" id="screen-6">
+          <div class="dossier-panel">
+            <span class="stamp">FASE 06 // AUTÓPSIA FORENSE: GREENWASHING</span>
+            <h2>PERÍCIA DA CAMPANHA "ECO-FAST MODA" (6 MIRAS)</h2>
+            <p class="subtitle">
+              Clique nas <strong>6 miras numeradas (1 a 6)</strong> espalhadas
+              na peça publicitária abaixo para mapear todas as fraudes técnicas
+              e éticas e desbloquear o Quiz Diagnóstico.
+            </p>
+
+            <div class="autopsy-workspace">
+              <div class="bad-flyer-wrapper">
+                <svg
+                  viewBox="0 0 420 480"
+                  width="100%"
+                  height="100%"
+                  style="display: block"
+                >
+                  <defs>
+                    <linearGradient
+                      id="ecoFastBg"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stop-color="#fefce8" />
+                      <stop offset="50%" stop-color="#dcfce7" />
+                      <stop offset="100%" stop-color="#ffedd5" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="420" height="480" fill="url(#ecoFastBg)" />
+                  <rect
+                    x="8"
+                    y="8"
+                    width="404"
+                    height="464"
+                    fill="none"
+                    stroke="#16a34a"
+                    stroke-width="5"
+                    stroke-dasharray="9 5"
+                  />
+
+                  <!-- Mira 1: Selo Verde Falso -->
+                  <g transform="translate(20, 18)">
+                    <circle
+                      cx="48"
+                      cy="48"
+                      r="44"
+                      fill="#15803d"
+                      stroke="#fde047"
+                      stroke-width="3"
+                    />
+                    <path d="M48,18 Q68,44 48,72 Q28,44 48,18" fill="#86efac" />
+                    <text
+                      x="48"
+                      y="50"
+                      font-family="Georgia, serif"
+                      font-weight="bold"
+                      font-size="11"
+                      fill="#ffffff"
+                      text-anchor="middle"
+                    >
+                      100% VERDE
+                    </text>
+                    <text
+                      x="48"
+                      y="63"
+                      font-family="Arial, sans-serif"
+                      font-size="8"
+                      fill="#fef08a"
+                      text-anchor="middle"
+                    >
+                      SELO ECO-FAST
+                    </text>
+                  </g>
+
+                  <!-- Mira 4: Ilustração Pseudo-Artesanal -->
+                  <g transform="translate(295, 20)">
+                    <rect
+                      x="0"
+                      y="0"
+                      width="98"
+                      height="84"
+                      rx="8"
+                      fill="#fef3c7"
+                      stroke="#d97706"
+                      stroke-width="2"
+                    />
+                    <path
+                      d="M18,54 Q49,14 80,54"
+                      fill="none"
+                      stroke="#15803d"
+                      stroke-width="3"
+                    />
+                    <circle cx="49" cy="36" r="10" fill="#ea580c" />
+                    <text
+                      x="49"
+                      y="73"
+                      font-family="Georgia, serif"
+                      font-style="italic"
+                      font-size="11.5"
+                      fill="#7c2d12"
+                      text-anchor="middle"
+                    >
+                      Feito à Mão*
+                    </text>
+                  </g>
+
+                  <!-- Mira 2: Conflito Tipográfico -->
+                  <g transform="rotate(-3 205 142)">
+                    <text
+                      x="205"
+                      y="130"
+                      font-family="'Comic Sans MS', cursive"
+                      font-weight="bold"
+                      font-size="22"
+                      fill="#ea580c"
+                      text-anchor="middle"
+                    >
+                      ECO-FAST MODA!
+                    </text>
+                    <text
+                      x="205"
+                      y="156"
+                      font-family="Impact, sans-serif"
+                      font-size="19"
+                      fill="#166534"
+                      text-anchor="middle"
+                    >
+                      COMPRE AGORA E SALVE A TERRA
+                    </text>
+                    <text
+                      x="205"
+                      y="177"
+                      font-family="'Times New Roman', serif"
+                      font-style="italic"
+                      font-size="16"
+                      fill="#dc2626"
+                      text-anchor="middle"
+                    >
+                      Looks descartáveis por R$ 12,90!
+                    </text>
+                  </g>
+
+                  <!-- Mira 3: Violação de Grid -->
+                  <g>
+                    <polygon
+                      points="72,202 87,232 119,235 95,257 101,289 72,273 43,289 49,257 25,235 57,232"
+                      fill="#dc2626"
+                      stroke="#facc15"
+                      stroke-width="3"
+                    />
+                    <text
+                      x="72"
+                      y="250"
+                      font-family="Impact, sans-serif"
+                      font-size="13"
+                      fill="#ffffff"
+                      text-anchor="middle"
+                    >
+                      OFERTA!
+                    </text>
+
+                    <rect
+                      x="142"
+                      y="202"
+                      width="248"
+                      height="94"
+                      transform="rotate(4 142 202)"
+                      fill="#f0fdf4"
+                      stroke="#ef4444"
+                      stroke-width="2"
+                      stroke-dasharray="4 3"
+                    />
+                    <text
+                      x="152"
+                      y="225"
+                      font-family="Courier New, monospace"
+                      font-weight="bold"
+                      font-size="12"
+                      fill="#0f172a"
+                    >
+                      COLEÇÃO SEMANAL ULTRA-RÁPIDA
+                    </text>
+                    <text
+                      x="152"
+                      y="245"
+                      font-family="Arial, sans-serif"
+                      font-size="11"
+                      fill="#334155"
+                    >
+                      Use duas vezes e descarte sem culpa!
+                    </text>
+                    <text
+                      x="152"
+                      y="265"
+                      font-family="Georgia, serif"
+                      font-size="11"
+                      fill="#15803d"
+                    >
+                      Poliéster 100% derivado de petróleo.
+                    </text>
+                  </g>
+
+                  <!-- Mira 5: Botão de Falsa Escassez -->
+                  <g transform="translate(55, 316)">
+                    <rect
+                      x="0"
+                      y="0"
+                      width="310"
+                      height="46"
+                      rx="23"
+                      fill="#16a34a"
+                      stroke="#facc15"
+                      stroke-width="3"
+                    />
+                    <text
+                      x="155"
+                      y="22"
+                      font-family="Impact, sans-serif"
+                      font-size="16"
+                      fill="#ffffff"
+                      letter-spacing="1"
+                      text-anchor="middle"
+                    >
+                      ÚLTIMAS 2 UNIDADES! CLIQUE JÁ!
+                    </text>
+                    <text
+                      x="155"
+                      y="37"
+                      font-family="Arial, sans-serif"
+                      font-size="9.5"
+                      fill="#fef08a"
+                      text-anchor="middle"
+                    >
+                      Oferta expira em 00:19 segundos (cronômetro falso)
+                    </text>
+                  </g>
+
+                  <!-- Mira 6: Letras Miúdas Dark Pattern -->
+                  <text
+                    x="210"
+                    y="396"
+                    font-family="Arial, sans-serif"
+                    font-size="7.2"
+                    fill="#94a3b8"
+                    text-anchor="middle"
+                  >
+                    *Selo "100% Verde" meramente ilustrativo sem qualquer
+                    certificação ambiental.
+                  </text>
+                  <text
+                    x="210"
+                    y="408"
+                    font-family="Arial, sans-serif"
+                    font-size="7.2"
+                    fill="#94a3b8"
+                    text-anchor="middle"
+                  >
+                    Ao clicar no botão, ativa-se cobrança recorrente oculta de
+                    R$ 139,90/mês.
+                  </text>
+                  <text
+                    x="210"
+                    y="420"
+                    font-family="Arial, sans-serif"
+                    font-size="7.2"
+                    fill="#94a3b8"
+                    text-anchor="middle"
+                  >
+                    Peças fabricadas em oficinas terceirizadas sem auditoria de
+                    direitos trabalhistas.
+                  </text>
+                </svg>
+
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-1"
+                  style="top: 12%; left: 14%"
+                  onclick="inspectHotspot(1)"
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-2"
+                  style="top: 29%; left: 46%"
+                  onclick="inspectHotspot(2)"
+                >
+                  2
+                </button>
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-3"
+                  style="top: 50%; left: 55%"
+                  onclick="inspectHotspot(3)"
+                >
+                  3
+                </button>
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-4"
+                  style="top: 12%; left: 79%"
+                  onclick="inspectHotspot(4)"
+                >
+                  4
+                </button>
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-5"
+                  style="top: 68%; left: 46%"
+                  onclick="inspectHotspot(5)"
+                >
+                  5
+                </button>
+                <button
+                  type="button"
+                  class="hotspot-btn"
+                  id="hs-6"
+                  style="top: 83%; left: 46%"
+                  onclick="inspectHotspot(6)"
+                >
+                  6
+                </button>
+              </div>
+
+              <div class="diagnostic-log">
+                <h3
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 0.92rem;
+                    color: var(--accent-amber);
+                  "
+                >
+                  LAUDO DE INFRAÇÕES (<span id="hotspot-count">0</span>/6
+                  MAPEADAS)
+                </h3>
+                <div class="diag-item" id="diag-1">
+                  [01] Aguardando inspeção na peça...
+                </div>
+                <div class="diag-item" id="diag-2">
+                  [02] Aguardando inspeção na peça...
+                </div>
+                <div class="diag-item" id="diag-3">
+                  [03] Aguardando inspeção na peça...
+                </div>
+                <div class="diag-item" id="diag-4">
+                  [04] Aguardando inspeção na peça...
+                </div>
+                <div class="diag-item" id="diag-5">
+                  [05] Aguardando inspeção na peça...
+                </div>
+                <div class="diag-item" id="diag-6">
+                  [06] Aguardando inspeção na peça...
+                </div>
+              </div>
+            </div>
+
+            <div class="quiz-box" id="autopsy-quiz-box">
+              <h3
+                style="
+                  font-family: var(--font-mono);
+                  color: var(--accent-amber);
+                  font-size: 0.98rem;
+                  margin-bottom: 1rem;
+                "
+              >
+                QUIZ DIAGNÓSTICO (4 QUESTÕES) — LIBERE A CHAVE DA FASE 6:
+              </h3>
+
+              <div class="quiz-question">
+                <p>
+                  1. Como se denomina a estratégia de usar selos verdes falsos e
+                  tons terrosos para simular sustentabilidade inexistente?
+                </p>
+                <select id="q-autopsy-1">
+                  <option value="">-- Selecione o conceito --</option>
+                  <option value="wrong1">Minimalismo Suíço</option>
+                  <option value="correct">Greenwashing</option>
+                  <option value="wrong2">Neoplasticismo</option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  2. Qual movimento histórico criticaria o uso da estética
+                  "Feito à Mão" para mascarar produção industrial descartável?
+                </p>
+                <select id="q-autopsy-2">
+                  <option value="">-- Selecione o movimento --</option>
+                  <option value="correct">
+                    Arts &amp; Crafts (William Morris)
+                  </option>
+                  <option value="wrong1">Futurismo Italiano</option>
+                  <option value="wrong2">Pop Art Comercial</option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  3. Como se chamam os padrões enganosos de interface
+                  (cronômetro falso e cobrança oculta nas letras miúdas)?
+                </p>
+                <select id="q-autopsy-3">
+                  <option value="">-- Selecione o termo técnico --</option>
+                  <option value="wrong1">Grid Modular</option>
+                  <option value="wrong2">Cromolitografia</option>
+                  <option value="correct">Dark Patterns</option>
+                </select>
+              </div>
+
+              <div class="quiz-question">
+                <p>
+                  4. Qual o principal efeito técnico de misturar 3 fontes
+                  distintas com caixas inclinadas sem alinhamento?
+                </p>
+                <select id="q-autopsy-4">
+                  <option value="">-- Selecione o efeito --</option>
+                  <option value="correct">
+                    Destrói a hierarquia visual e provoca fadiga de leitura
+                  </option>
+                  <option value="wrong1">
+                    Aumenta a acessibilidade para pessoas com baixa visão
+                  </option>
+                  <option value="wrong2">
+                    Aplica fielmente os princípios da Escola de Ulm
+                  </option>
+                </select>
+              </div>
+
+              <div style="margin-top: 1rem">
+                <button
+                  type="button"
+                  class="btn-primary btn-amber"
+                  onclick="validateAutopsyQuiz()"
+                >
+                  VALIDAR QUIZ DIAGNÓSTICO &amp; REVELAR CHAVE
+                </button>
+              </div>
+
+              <div class="revealed-banner" id="phase6-password-banner">
+                <strong>QUIZ DIAGNÓSTICO APROVADO!</strong><br />
+                Chave revelada para o Tribunal Final:
+                <span
+                  style="color: #fde047; font-size: 1.15rem; font-weight: bold"
+                  >ÉTICA</span
+                >
+              </div>
+            </div>
+
+            <div class="unlock-bar">
+              <div class="input-group">
+                <label for="pass-phase-6">Chave da Fase 6:</label>
+                <input
+                  type="text"
+                  id="pass-phase-6"
+                  placeholder="Digite a chave revelada..."
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-primary" onclick="checkPhase6()">
+                DESBLOQUEAR FASE 07 (TRIBUNAL)
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+                 TELA 7: FASE 7 - TRIBUNAL DO DESIGN & LAUDO OFICIAL
+                 ============================================================== -->
+        <section class="screen" id="screen-7">
+          <div class="dossier-panel">
+            <span class="stamp"
+              >FASE 07 // TRIBUNAL DO DESIGN &amp; LAUDO OFICIAL</span
+            >
+            <h2>VEREDITO FINAL E RESPONSABILIDADE ÉTICA</h2>
+            <p class="subtitle">
+              O "Bom Design" não morreu por falta de computadores; foi asfixiado
+              quando perdeu sua função social. Tomem a decisão ética final e
+              redijam o laudo conclusivo da equipe.
+            </p>
+
+            <div class="no-print">
+              <label
+                >1. Dilema Profissional: Uma empresa contrata sua equipe para
+                criar o aplicativo de um serviço financeiro escondendo juros
+                abusivos em letras cinza-claro minúsculas. Qual a postura
+                correta do designer?</label
+              >
+              <div class="radio-card-group">
+                <label class="radio-card">
+                  <input type="radio" name="ethical-dilemma" value="wrong1" />
+                  <span
+                    >Aceitar imediatamente sem questionar, pois o designer é
+                    apenas um executor técnico neutro das ordens do
+                    cliente.</span
+                  >
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="ethical-dilemma" value="ethical" />
+                  <span
+                    >Recusar a manipulação visual enganosa (Dark Pattern) e
+                    propor comunicação transparente, acessível e responsável com
+                    o cidadão.</span
+                  >
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="ethical-dilemma" value="wrong2" />
+                  <span
+                    >Aumentar ainda mais o ruído visual e as cores neon para
+                    distrair o usuário e acelerar a contratação.</span
+                  >
+                </label>
+              </div>
+
+              <div class="input-group">
+                <label for="final-report-text"
+                  >2. Parecer Crítico da Equipe (mínimo de 80 caracteres): Como
+                  o estudo da História do Design e da Arte (de William Morris e
+                  Bauhaus à Tropicália) ajuda o designer a não reproduzir
+                  consumo vazio ou enganoso?</label
+                >
+                <textarea
+                  id="final-report-text"
+                  rows="5"
+                  placeholder="Redijam aqui a conclusão crítica e fundamentada da equipe..."
+                ></textarea>
+                <div
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 0.78rem;
+                    color: var(--text-muted);
+                    margin-top: 0.35rem;
+                  "
+                >
+                  Caracteres digitados: <span id="char-counter">0</span> / 80
+                  mínimo
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="btn-primary btn-emerald"
+                onclick="generateOfficialReport()"
+              >
+                EMITIR LAUDO PERICIAL OFICIAL
+              </button>
+            </div>
+
+            <!-- Certificado Oficial Imprimível / PDF -->
+            <div class="certificate-preview" id="certificate-box">
+              <div class="cert-header">
+                <div>
+                  <strong style="font-size: 1.2rem; letter-spacing: 0.04em"
+                    >LAUDO PERICIAL OFICIAL // HISTÓRIA DO DESIGN E DA
+                    ARTE</strong
+                  ><br />
+                  <span style="font-size: 0.85rem; color: #475569"
+                    >1º Ano do Ensino Médio • Investigação "Quem Matou o Bom
+                    Design?" (7 Fases)</span
+                  >
+                </div>
+                <div
+                  style="
+                    border: 2px solid #16a34a;
+                    color: #16a34a;
+                    font-family: monospace;
+                    font-weight: bold;
+                    padding: 0.25rem 0.65rem;
+                  "
+                >
+                  CASO ENCERRADO
+                </div>
+              </div>
+
+              <p style="margin-bottom: 0.5rem">
+                <strong>EQUIPE RESPONSÁVEL:</strong>
+                <span id="cert-team-name"></span>
+              </p>
+              <p style="margin-bottom: 0.5rem">
+                <strong>TEMPO RESTANTE / UTILIZADO:</strong>
+                <span id="cert-time-remaining"></span> restantes (de 100:00)
+              </p>
+              <p style="margin-bottom: 1rem">
+                <strong>REPUTAÇÃO PERICIAL FINAL:</strong>
+                <span
+                  id="cert-reputation"
+                  style="font-weight: bold; color: #0f172a"
+                ></span>
+              </p>
+
+              <div
+                style="
+                  background: #f8fafc;
+                  border-left: 4px solid #0f172a;
+                  padding: 1rem;
+                  margin-bottom: 1.25rem;
+                "
+              >
+                <strong
+                  style="
+                    display: block;
+                    margin-bottom: 0.4rem;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
+                  "
+                  >Parecer Crítico Homologado:</strong
+                >
+                <p
+                  id="cert-verdict-body"
+                  style="
+                    font-style: italic;
+                    color: #1e293b;
+                    white-space: pre-wrap;
+                  "
+                ></p>
+              </div>
+
+              <div
+                class="no-print"
+                style="display: flex; gap: 0.75rem; flex-wrap: wrap"
+              >
+                <button
+                  type="button"
+                  class="btn-primary"
+                  onclick="window.print()"
+                >
+                  IMPRIMIR / SALVAR PDF PARA ENTREGA
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ======================================================================
+         MODAL DE AMPLIAÇÃO DAS 8 EVIDÊNCIAS DA FASE 1
+         ====================================================================== -->
+    <div
+      class="modal-backdrop"
+      id="evidence-modal"
+      onclick="closeEvidenceModal(event)"
+    >
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <strong
+            id="modal-title"
+            style="
+              font-family: var(--font-mono);
+              color: var(--accent-amber);
+              font-size: 0.95rem;
+            "
+            >EVIDÊNCIA</strong
+          >
+          <button
+            type="button"
+            class="modal-close"
+            onclick="closeEvidenceModal()"
+          >
+            FECHAR [X]
+          </button>
+        </div>
+        <div class="modal-media-container" id="modal-media"></div>
+        <p
+          id="modal-desc"
+          style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.55"
+        ></p>
+        <div class="clue-highlight" id="modal-clue"></div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         NOTIFICAÇÃO FLUTUANTE (TOAST)
+         ====================================================================== -->
+    <div class="toast-alert" id="toast-alert">
+      <span id="toast-msg"></span>
+    </div>
+
+    <!-- ======================================================================
+         LÓGICA JAVASCRIPT COMPLETA E CONSOLIDADA
+         ====================================================================== -->
+    <script>
+      // Estado Global do Jogo (100 minutos = 6000 segundos)
+      const gameState = {
+        teamName: '',
+        totalSeconds: 6000,
+        remainingSeconds: 6000,
+        timerInterval: null,
+        timerRunning: false,
+        currentScreen: 0,
+        maxUnlockedScreen: 0,
+        reputation: 100,
+        unlockedKeys: [],
+        hintsUsed: new Set(),
+        inspectedEvidence: new Set(),
+        inspectedHotspots: new Set(),
+      };
+
+      // Banco de Dados das 8 Obras Históricas em SVG de Alta Definição
+      // Ordem Cronológica: A (7) -> B (4) -> E (2) -> C (8) -> F (5) -> D (3) -> G (9) -> H (1) = 74285391
+      const evidenceData = {
+        A: {
+          title: 'EVIDÊNCIA A // ARTS & CRAFTS — WILLIAM MORRIS (1883)',
+          desc: 'Data: 1883 (Inglaterra). Estampa botânica artesanal "Strawberry Thief" com pássaros, morangos e folhagens entrelaçadas produzida em blocos de madeira entalhada, reagindo à alienação fabril e defendendo a dignidade do trabalho manual.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 7',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <pattern id="morrisLinen" width="8" height="8" patternUnits="userSpaceOnUse">
+                            <rect width="8" height="8" fill="#132638"/>
+                            <path d="M0 4H8M4 0V8" stroke="#1e3a52" stroke-width="0.7"/>
+                        </pattern>
+                        <radialGradient id="berryGrad" cx="35%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="#f87171"/>
+                            <stop offset="60%" stop-color="#dc2626"/>
+                            <stop offset="100%" stop-color="#7f1d1d"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="400" height="230" fill="url(#morrisLinen)"/>
+                    <rect x="8" y="8" width="384" height="214" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 3"/>
+                    <path d="M200,220 C145,175 75,185 45,115 C25,65 85,25 140,55 C175,75 185,125 200,150" fill="none" stroke="#4d7c0f" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M200,220 C255,175 325,185 355,115 C375,65 315,25 260,55 C225,75 215,125 200,150" fill="none" stroke="#4d7c0f" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M75,145 Q40,135 35,105 Q65,110 75,145 Z" fill="#65a30d" stroke="#1a2e05" stroke-width="1.5"/>
+                    <path d="M325,145 Q360,135 365,105 Q335,110 325,145 Z" fill="#65a30d" stroke="#1a2e05" stroke-width="1.5"/>
+                    <path d="M125,60 Q105,25 145,22 Q155,48 125,60 Z" fill="#84cc16" stroke="#1a2e05" stroke-width="1.5"/>
+                    <path d="M275,60 Q295,25 255,22 Q245,48 275,60 Z" fill="#84cc16" stroke="#1a2e05" stroke-width="1.5"/>
+                    <path d="M115,115 C95,105 90,85 110,80 C125,76 142,88 150,98 L166,94 L154,107 C146,120 128,122 115,115 Z" fill="#d97706" stroke="#fef3c7" stroke-width="1.2"/>
+                    <circle cx="107" cy="88" r="2.2" fill="#0f172a"/>
+                    <path d="M285,115 C305,105 310,85 290,80 C275,76 258,88 250,98 L234,94 L246,107 C254,120 272,122 285,115 Z" fill="#d97706" stroke="#fef3c7" stroke-width="1.2"/>
+                    <circle cx="293" cy="88" r="2.2" fill="#0f172a"/>
+                    <path d="M88,155 C76,155 74,175 88,186 C102,175 100,155 88,155 Z" fill="url(#berryGrad)" stroke="#fef08a" stroke-width="1"/>
+                    <path d="M312,155 C300,155 298,175 312,186 C326,175 324,155 312,155 Z" fill="url(#berryGrad)" stroke="#fef08a" stroke-width="1"/>
+                    <circle cx="200" cy="82" r="18" fill="#fef08a" opacity="0.9"/>
+                    <circle cx="200" cy="82" r="8" fill="#b45309"/>
+                    <rect x="85" y="192" width="230" height="24" rx="4" fill="#0f172a" stroke="#d97706" stroke-width="1.2"/>
+                    <text x="200" y="208" fill="#fef3c7" font-family="Georgia, serif" font-weight="bold" font-size="12" letter-spacing="1.5" text-anchor="middle">ARTS &amp; CRAFTS • 1883</text>
+                </svg>`,
+        },
+        B: {
+          title: 'EVIDÊNCIA B // ART NOUVEAU — ALPHONSE MUCHA (1896)',
+          desc: 'Data: 1896 (Paris, Belle Époque). Cartaz litográfico colorido com moldura circular dourada, arabescos orgânicos inspirados na natureza ("linha golpe de chicote") e tipografia ornamental.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 4',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <linearGradient id="muchaGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fde68a"/>
+                            <stop offset="50%" stop-color="#d97706"/>
+                            <stop offset="100%" stop-color="#78350f"/>
+                        </linearGradient>
+                        <radialGradient id="muchaHalo" cx="50%" cy="45%" r="50%">
+                            <stop offset="0%" stop-color="#fef3c7"/>
+                            <stop offset="65%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#451a03"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="400" height="230" fill="#2e1832"/>
+                    <rect x="10" y="10" width="380" height="210" rx="14" fill="none" stroke="url(#muchaGold)" stroke-width="3"/>
+                    <circle cx="200" cy="105" r="78" fill="url(#muchaHalo)" stroke="#fef3c7" stroke-width="2.5"/>
+                    <circle cx="200" cy="105" r="64" fill="none" stroke="#451a03" stroke-width="2" stroke-dasharray="5 4"/>
+                    <circle cx="200" cy="105" r="50" fill="#3b1d42" stroke="#fde68a" stroke-width="1.5"/>
+                    <path d="M40,210 C55,120 120,145 140,80 C155,35 110,20 90,55" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M360,210 C345,120 280,145 260,80 C245,35 290,20 310,55" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M150,150 Q200,195 250,150" fill="none" stroke="#f472b6" stroke-width="3.5"/>
+                    <circle cx="200" cy="95" r="22" fill="#fde68a"/>
+                    <path d="M174,142 Q200,118 226,142" fill="#f472b6"/>
+                    <circle cx="72" cy="85" r="14" fill="#ec4899" stroke="#fde68a" stroke-width="2"/>
+                    <circle cx="328" cy="85" r="14" fill="#ec4899" stroke="#fde68a" stroke-width="2"/>
+                    <rect x="92" y="176" width="216" height="34" rx="17" fill="#1e1024" stroke="url(#muchaGold)" stroke-width="2.5"/>
+                    <text x="200" y="198" fill="#fde68a" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="16" letter-spacing="2" text-anchor="middle">Art Nouveau • 1896</text>
+                </svg>`,
+        },
+        C: {
+          title: 'EVIDÊNCIA C // CONSTRUTIVISMO RUSSO — EL LISSITZKY (1919)',
+          desc: 'Data: 1919–1920 (Rússia Soviética). Cartaz "Batam os Brancos com a Cunha Vermelha". Formas geométricas dinâmicas, tensão diagonal em vermelho, preto e creme e tipografia revolucionária de agitação social.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 8',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <rect width="400" height="230" fill="#f3efe6"/>
+                    <polygon points="210,0 400,0 400,230 295,230" fill="#141414"/>
+                    <circle cx="268" cy="115" r="76" fill="#faf8f5" stroke="#141414" stroke-width="3"/>
+                    <polygon points="28,36 274,116 74,174" fill="#dc2626"/>
+                    <rect x="285" y="65" width="28" height="10" transform="rotate(28 285 65)" fill="#dc2626"/>
+                    <rect x="295" y="148" width="34" height="8" transform="rotate(-22 295 148)" fill="#141414"/>
+                    <polygon points="155,34 176,42 162,58" fill="#141414"/>
+                    <line x1="25" y1="195" x2="215" y2="195" stroke="#141414" stroke-width="5"/>
+                    <text x="28" y="216" fill="#141414" font-family="Arial Black, Impact, sans-serif" font-size="14" letter-spacing="1.5">CONSTRUTIVISMO • 1919</text>
+                </svg>`,
+        },
+        D: {
+          title: 'EVIDÊNCIA D // BAUHAUS WEIMAR — JOOST SCHMIDT (1923)',
+          desc: 'Data: 1923 (Alemanha). Cartaz oficial da Exposição da Bauhaus em Weimar. Estrutura geométrica diagonal e modular com formas fundamentais e cores primárias sob o princípio "a forma segue a função".',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 3',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <rect width="400" height="230" fill="#ebe6d8"/>
+                    <rect x="26" y="20" width="348" height="190" fill="none" stroke="#18181b" stroke-width="3"/>
+                    <line x1="195" y1="20" x2="195" y2="210" stroke="#18181b" stroke-width="3"/>
+                    <line x1="26" y1="142" x2="374" y2="142" stroke="#18181b" stroke-width="3"/>
+                    <rect x="44" y="36" width="56" height="56" fill="#dc2626"/>
+                    <circle cx="144" cy="64" r="28" fill="#eab308"/>
+                    <polygon points="110,96 76,132 144,132" fill="#1d4ed8"/>
+                    <rect x="210" y="36" width="148" height="24" fill="#18181b"/>
+                    <text x="284" y="53" fill="#ebe6d8" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="13" letter-spacing="2" text-anchor="middle">BAUHAUS</text>
+                    <text x="212" y="82" fill="#18181b" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="12">AUSSTELLUNG</text>
+                    <text x="212" y="102" fill="#dc2626" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="15">WEIMAR 1923</text>
+                    <rect x="212" y="114" width="90" height="12" fill="#1d4ed8"/>
+                    <text x="44" y="182" fill="#18181b" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="18" letter-spacing="1">FORMA = FUNÇÃO</text>
+                </svg>`,
+        },
+        E: {
+          title: 'EVIDÊNCIA E // DADAÍSMO — HANNAH HÖCH (1919)',
+          desc: 'Data: 1919 (Berlim, Pós-1ª Guerra Mundial). Fotomontagem satírica com recortes tipográficos de jornal, engrenagens mecânicas e colagem fragmentada denunciando a guerra e a hipocrisia burguesa.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 2',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <rect width="400" height="230" fill="#26231f"/>
+                    <rect x="20" y="18" width="165" height="110" transform="rotate(-5 20 18)" fill="#d6d3d1" stroke="#000" stroke-width="1.5"/>
+                    <rect x="195" y="14" width="180" height="95" transform="rotate(4 195 14)" fill="#a8a29e" stroke="#000" stroke-width="1.5"/>
+                    <rect x="45" y="128" width="310" height="82" transform="rotate(-1.5 45 128)" fill="#e7e5e4" stroke="#000" stroke-width="1.5"/>
+                    <circle cx="315" cy="145" r="42" fill="#18181b" stroke="#dc2626" stroke-width="5" stroke-dasharray="10 5"/>
+                    <circle cx="315" cy="145" r="16" fill="#facc15"/>
+                    <rect x="36" y="34" width="44" height="48" transform="rotate(-8 36 34)" fill="#18181b"/>
+                    <text x="58" y="68" fill="#ffffff" font-family="Times New Roman, serif" font-weight="bold" font-size="34" text-anchor="middle">D</text>
+                    <rect x="86" y="28" width="44" height="48" transform="rotate(6 86 28)" fill="#dc2626"/>
+                    <text x="108" y="62" fill="#fef08a" font-family="Courier New, monospace" font-weight="bold" font-size="34" text-anchor="middle">A</text>
+                    <rect x="136" y="38" width="44" height="48" transform="rotate(-4 136 38)" fill="#18181b"/>
+                    <text x="158" y="72" fill="#ffffff" font-family="Arial Black, sans-serif" font-size="32" text-anchor="middle">D</text>
+                    <rect x="186" y="30" width="44" height="48" transform="rotate(9 186 30)" fill="#facc15"/>
+                    <text x="208" y="64" fill="#000000" font-family="Georgia, serif" font-weight="bold" font-size="34" text-anchor="middle">A</text>
+                    <rect x="52" y="148" width="210" height="32" transform="rotate(-3 52 148)" fill="#18181b"/>
+                    <text x="157" y="169" transform="rotate(-3 52 148)" fill="#facc15" font-family="Courier New, monospace" font-weight="bold" font-size="14" text-anchor="middle">ANTI-ARTE • BERLIM 1919</text>
+                </svg>`,
+        },
+        F: {
+          title:
+            'EVIDÊNCIA F // DE STIJL / NEOPLASTICISMO — PIET MONDRIAN (1921)',
+          desc: 'Data: 1921 (Holanda). Composição Neoplasticista de Piet Mondrian. Redução rigorosa da linguagem visual a linhas ortogonais pretas assimétricas e planos puros em vermelho, amarelo e azul.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 5',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <rect width="400" height="230" fill="#f8fafc"/>
+                    <rect x="0" y="0" width="155" height="145" fill="#dc2626"/>
+                    <rect x="315" y="0" width="85" height="95" fill="#eab308"/>
+                    <rect x="235" y="145" width="165" height="85" fill="#1d4ed8"/>
+                    <rect x="0" y="145" width="75" height="85" fill="#e2e8f0"/>
+                    <line x1="155" y1="0" x2="155" y2="230" stroke="#09090b" stroke-width="8"/>
+                    <line x1="0" y1="145" x2="400" y2="145" stroke="#09090b" stroke-width="8"/>
+                    <line x1="315" y1="0" x2="315" y2="145" stroke="#09090b" stroke-width="8"/>
+                    <line x1="235" y1="145" x2="235" y2="230" stroke="#09090b" stroke-width="8"/>
+                    <line x1="75" y1="145" x2="75" y2="230" stroke="#09090b" stroke-width="8"/>
+                    <line x1="155" y1="95" x2="400" y2="95" stroke="#09090b" stroke-width="8"/>
+                    <text x="235" y="126" fill="#09090b" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="14" letter-spacing="1.5" text-anchor="middle">DE STIJL • 1921</text>
+                </svg>`,
+        },
+        G: {
+          title: 'EVIDÊNCIA G // POP ART — ANDY WARHOL (1962)',
+          desc: 'Data: 1962 (EUA). Serigrafia em grade 4 painéis com retícula de meio-tom e cores saturadas vibrantes, apropriando embalagens comerciais e celebridades para ironizar a sociedade de consumo de massas.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 9',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <pattern id="benDay" width="6" height="6" patternUnits="userSpaceOnUse">
+                            <circle cx="3" cy="3" r="1.4" fill="#000000" opacity="0.22"/>
+                        </pattern>
+                    </defs>
+                    <rect x="0" y="0" width="200" height="115" fill="#ec4899"/>
+                    <rect x="200" y="0" width="200" height="115" fill="#facc15"/>
+                    <rect x="0" y="115" width="200" height="115" fill="#06b6d4"/>
+                    <rect x="200" y="115" width="200" height="115" fill="#84cc16"/>
+                    <rect width="400" height="230" fill="url(#benDay)"/>
+                    <line x1="200" y1="0" x2="200" y2="230" stroke="#09090b" stroke-width="4"/>
+                    <line x1="0" y1="115" x2="400" y2="115" stroke="#09090b" stroke-width="4"/>
+                    <circle cx="100" cy="57" r="34" fill="#facc15" stroke="#09090b" stroke-width="3"/>
+                    <text x="100" y="63" fill="#09090b" font-family="Impact, sans-serif" font-size="18" text-anchor="middle">POP</text>
+                    <circle cx="300" cy="57" r="34" fill="#dc2626" stroke="#09090b" stroke-width="3"/>
+                    <text x="300" y="63" fill="#ffffff" font-family="Impact, sans-serif" font-size="18" text-anchor="middle">ART</text>
+                    <circle cx="100" cy="172" r="34" fill="#f97316" stroke="#09090b" stroke-width="3"/>
+                    <text x="100" y="178" fill="#ffffff" font-family="Impact, sans-serif" font-size="18" text-anchor="middle">1962</text>
+                    <circle cx="300" cy="172" r="34" fill="#a855f7" stroke="#09090b" stroke-width="3"/>
+                    <text x="300" y="178" fill="#fef08a" font-family="Impact, sans-serif" font-size="16" text-anchor="middle">MASSA</text>
+                </svg>`,
+        },
+        H: {
+          title:
+            'EVIDÊNCIA H // PÓS-MODERNISMO & MEMPHIS — ETTORE SOTTSASS (1981)',
+          desc: 'Data: 1981 (Milão, Itália). Estante icônica "Carlton", projetada por Ettore Sottsass para o Grupo Memphis. Estrutura assimétrica multicolorida rompendo com o minimalismo frio do Estilo Suíço.',
+          clue: 'CÓDIGO IDENTIFICADOR DESTA EVIDÊNCIA: 1',
+          svg: `<svg viewBox="0 0 400 230" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <pattern id="memphisSquiggle" width="24" height="24" patternUnits="userSpaceOnUse">
+                            <rect width="24" height="24" fill="#f1f5f9"/>
+                            <circle cx="6" cy="6" r="2" fill="#0f172a"/>
+                            <path d="M12,18 L18,12" stroke="#0f172a" stroke-width="2"/>
+                        </pattern>
+                    </defs>
+                    <rect width="400" height="230" fill="url(#memphisSquiggle)"/>
+                    <rect x="95" y="182" width="210" height="32" fill="#18181b" stroke="#000" stroke-width="2.5"/>
+                    <circle cx="125" cy="198" r="5" fill="#ec4899"/>
+                    <circle cx="165" cy="198" r="5" fill="#06b6d4"/>
+                    <circle cx="205" cy="198" r="5" fill="#facc15"/>
+                    <circle cx="245" cy="198" r="5" fill="#10b981"/>
+                    <circle cx="280" cy="198" r="5" fill="#f97316"/>
+                    <rect x="186" y="24" width="28" height="158" fill="#facc15" stroke="#000" stroke-width="2.5"/>
+                    <polygon points="105,65 186,115 186,136 105,86" fill="#06b6d4" stroke="#000" stroke-width="2.5"/>
+                    <polygon points="295,65 214,115 214,136 295,86" fill="#ec4899" stroke="#000" stroke-width="2.5"/>
+                    <polygon points="118,162 186,120 186,140 118,182" fill="#ef4444" stroke="#000" stroke-width="2.5"/>
+                    <polygon points="282,162 214,120 214,140 282,182" fill="#10b981" stroke="#000" stroke-width="2.5"/>
+                    <rect x="135" y="42" width="130" height="16" fill="#f97316" stroke="#000" stroke-width="2.5"/>
+                    <rect x="295" y="18" width="94" height="24" rx="4" fill="#18181b"/>
+                    <text x="342" y="34" fill="#facc15" font-family="Arial Black, sans-serif" font-size="11" text-anchor="middle">MEMPHIS 1981</text>
+                </svg>`,
+        },
+      };
+
+      // ======================================================================
+      // UTILITÁRIOS GLOBAIS: NORMALIZAÇÃO, TOAST, REPUTAÇÃO & CRONÔMETRO
+      // ======================================================================
+      function normalizeText(str) {
+        if (!str) return '';
+        return str
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toUpperCase()
+          .trim();
+      }
+
+      let toastTimeout = null;
+      function showToast(message, isSuccess = false) {
+        const toast = document.getElementById('toast-alert');
+        const msgEl = document.getElementById('toast-msg');
+        if (!toast || !msgEl) return;
+
+        msgEl.textContent = message;
+        toast.classList.remove('success', 'show');
+        if (isSuccess) toast.classList.add('success');
+        toast.classList.add('show');
+
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 4200);
+      }
+
+      function updateReputationUI() {
+        const scoreEl = document.getElementById('reputation-score');
+        const barEl = document.getElementById('reputation-bar');
+        if (scoreEl) scoreEl.textContent = `${gameState.reputation}%`;
+        if (barEl) {
+          barEl.style.width = `${gameState.reputation}%`;
+          if (gameState.reputation >= 70) {
+            barEl.style.backgroundColor = 'var(--accent-emerald)';
+          } else if (gameState.reputation >= 40) {
+            barEl.style.backgroundColor = 'var(--accent-amber)';
+          } else {
+            barEl.style.backgroundColor = 'var(--accent-crimson)';
+          }
+        }
+      }
+
+      function penalizeReputation(amount, reasonText) {
+        gameState.reputation = Math.max(0, gameState.reputation - amount);
+        updateReputationUI();
+        showToast(`${reasonText} (-${amount}% de Reputação Pericial).`, false);
+      }
+
+      function buyHint(phaseNumber, hintContent) {
+        const hintTextEl = document.getElementById(`hint-text-${phaseNumber}`);
+        if (!gameState.hintsUsed.has(phaseNumber)) {
+          gameState.hintsUsed.add(phaseNumber);
+          gameState.reputation = Math.max(0, gameState.reputation - 5);
+          updateReputationUI();
+          showToast(
+            `Dica da Fase 0${phaseNumber} desbloqueada (-5% de Reputação).`,
+            false,
+          );
+        }
+        if (hintTextEl) {
+          hintTextEl.innerHTML = `<strong style="color:#fde68a;">DICA LIBERADA:</strong> ${hintContent}`;
+        }
+      }
+
+      function registerUnlockedKey(keyLabel) {
+        if (!gameState.unlockedKeys.includes(keyLabel)) {
+          gameState.unlockedKeys.push(keyLabel);
+        }
+        const container = document.getElementById('unlocked-keys-list');
+        if (container) {
+          container.innerHTML = gameState.unlockedKeys
+            .map((k) => `<span class="key-chip">${k}</span>`)
+            .join('');
+        }
+      }
+
+      function updateTimerDisplay() {
+        const display = document.getElementById('timer-display');
+        if (!display) return;
+        const mins = Math.floor(gameState.remainingSeconds / 60);
+        const secs = gameState.remainingSeconds % 60;
+        display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+        if (gameState.remainingSeconds <= 600) {
+          display.classList.add('warning');
+        } else {
+          display.classList.remove('warning');
+        }
+      }
+
+      function startTimer() {
+        if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+        gameState.timerRunning = true;
+        const btnToggle = document.getElementById('btn-toggle-timer');
+        if (btnToggle) btnToggle.textContent = 'PAUSAR';
+
+        gameState.timerInterval = setInterval(() => {
+          if (!gameState.timerRunning) return;
+          if (gameState.remainingSeconds > 0) {
+            gameState.remainingSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(gameState.timerInterval);
+            gameState.timerRunning = false;
+            showToast(
+              'TEMPO ESGOTADO! Concluam a fase atual e emitam o laudo.',
+              false,
+            );
+          }
+        }, 1000);
+      }
+
+      function toggleTimer() {
+        const btnToggle = document.getElementById('btn-toggle-timer');
+        if (gameState.timerRunning) {
+          gameState.timerRunning = false;
+          if (btnToggle) btnToggle.textContent = 'RETOMAR';
+          showToast('Cronômetro pausado pelo perito.', false);
+        } else {
+          gameState.timerRunning = true;
+          if (btnToggle) btnToggle.textContent = 'PAUSAR';
+          showToast('Cronômetro retomado.', true);
+        }
+      }
+
+      function resetTimer() {
+        gameState.remainingSeconds = gameState.totalSeconds;
+        updateTimerDisplay();
+        if (!gameState.timerRunning && gameState.currentScreen > 0) {
+          startTimer();
+        }
+        showToast('Cronômetro reiniciado para 100:00.', true);
+      }
+
+      // ======================================================================
+      // NAVEGAÇÃO ENTRE TELAS E CONTROLE DO MENU LATERAL
+      // ======================================================================
+      function goToScreen(targetIndex) {
+        if (targetIndex > gameState.maxUnlockedScreen) {
+          gameState.maxUnlockedScreen = targetIndex;
+        }
+        gameState.currentScreen = targetIndex;
+
+        document.querySelectorAll('.screen').forEach((sec, idx) => {
+          sec.classList.toggle('active', idx === targetIndex);
+        });
+
+        for (let i = 0; i <= 7; i++) {
+          const navBtn = document.getElementById(`nav-${i}`);
+          const badge = document.getElementById(`badge-${i}`);
+          if (!navBtn) continue;
+
+          navBtn.classList.remove('active', 'unlocked', 'completed');
+
+          if (i <= gameState.maxUnlockedScreen) {
+            navBtn.classList.add('unlocked');
+          }
+          if (i < gameState.maxUnlockedScreen) {
+            navBtn.classList.add('completed');
+            if (badge) badge.textContent = '✔';
+          } else if (i === gameState.maxUnlockedScreen && i > 0) {
+            if (badge) badge.textContent = 'ATUAL';
+          }
+          if (i === targetIndex) {
+            navBtn.classList.add('active');
+          }
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function navigateIfUnlocked(targetIndex) {
+        if (targetIndex <= gameState.maxUnlockedScreen) {
+          goToScreen(targetIndex);
+        } else {
+          showToast(
+            `ACESSO BLOQUEADO: Resolva a Fase 0${gameState.maxUnlockedScreen} primeiro.`,
+            false,
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 1: MINIATURAS SVG, MODAIS DE ZOOM E VALIDAÇÃO (74285391)
+      // ======================================================================
+      function renderPhase1Thumbnails() {
+        Object.keys(evidenceData).forEach((letter) => {
+          const thumbContainer = document.getElementById(`thumb-ev-${letter}`);
+          if (thumbContainer && evidenceData[letter]) {
+            thumbContainer.innerHTML = evidenceData[letter].svg;
+          }
+        });
+      }
+
+      function openEvidenceModal(letter) {
+        const item = evidenceData[letter];
+        if (!item) return;
+
+        gameState.inspectedEvidence.add(letter);
+        const cardEl = document.getElementById(`card-ev-${letter}`);
+        if (cardEl) cardEl.classList.add('inspected');
+
+        document.getElementById('modal-title').textContent = item.title;
+        document.getElementById('modal-media').innerHTML = item.svg;
+        document.getElementById('modal-desc').textContent = item.desc;
+        document.getElementById('modal-clue').textContent = item.clue;
+
+        document.getElementById('evidence-modal').classList.add('open');
+      }
+
+      function closeEvidenceModal(event) {
+        if (event && event.target && event.target.id !== 'evidence-modal')
+          return;
+        document.getElementById('evidence-modal').classList.remove('open');
+      }
+
+      function checkPhase1() {
+        const rawInput = document.getElementById('pass-phase-1').value;
+        const cleaned = rawInput.replace(/\s+/g, '');
+
+        if (cleaned === '74285391') {
+          registerUnlockedKey('F1: 74285391');
+          showToast('ORDEM CRONOLÓGICA VALIDADA! Abrindo Fase 02...', true);
+          goToScreen(2);
+        } else {
+          penalizeReputation(
+            5,
+            'Sequência cronológica incorreta! Ordene do mais antigo (1883) ao mais recente (1981)',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 2: VALIDAÇÃO DOS 5 MANIFESTOS CRUZADOS -> DIALETICA
+      // ======================================================================
+      function validateManifestoGaps() {
+        const g1 = normalizeText(document.getElementById('gap-1').value);
+        const g2 = normalizeText(document.getElementById('gap-2').value);
+        const g3 = normalizeText(document.getElementById('gap-3').value);
+        const g4 = normalizeText(document.getElementById('gap-4').value);
+        const g5 = normalizeText(document.getElementById('gap-5').value);
+
+        const ok1 = g1 === 'ALIENACAO';
+        const ok2 = g2 === 'PROLETARIADO';
+        const ok3 = g3 === 'FUNCAO';
+        const ok4 = g4 === 'GRID';
+        const ok5 = g5 === 'SEMIOTICA';
+
+        if (ok1 && ok2 && ok3 && ok4 && ok5) {
+          document
+            .getElementById('phase2-master-banner')
+            .classList.add('visible');
+          showToast(
+            'Todos os 5 manifestos decifrados! Chave Mestra: DIALÉTICA.',
+            true,
+          );
+        } else {
+          penalizeReputation(
+            5,
+            'Uma ou mais lacunas dos manifestos estão incorretas',
+          );
+        }
+      }
+
+      function checkPhase2() {
+        const g1 = normalizeText(document.getElementById('gap-1').value);
+        const g2 = normalizeText(document.getElementById('gap-2').value);
+        const g3 = normalizeText(document.getElementById('gap-3').value);
+        const g4 = normalizeText(document.getElementById('gap-4').value);
+        const g5 = normalizeText(document.getElementById('gap-5').value);
+
+        if (
+          g1 !== 'ALIENACAO' ||
+          g2 !== 'PROLETARIADO' ||
+          g3 !== 'FUNCAO' ||
+          g4 !== 'GRID' ||
+          g5 !== 'SEMIOTICA'
+        ) {
+          penalizeReputation(
+            5,
+            'Preencha e valide as 5 lacunas dos manifestos antes de avançar',
+          );
+          return;
+        }
+
+        const answer = normalizeText(
+          document.getElementById('pass-phase-2').value,
+        );
+        if (answer === 'DIALETICA') {
+          registerUnlockedKey('F2: DIALÉTICA');
+          showToast(
+            'CHAVE MESTRA VALIDADA! Avançando para Perícia Avançada no Affinity/Figma...',
+            true,
+          );
+          goToScreen(3);
+        } else {
+          penalizeReputation(
+            5,
+            'Chave Mestra incorreta! Clique em "Verificar 5 Lacunas" acima',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 3: RAIO-X FORENSE AVANÇADO NO AFFINITY / FIGMA -> ULM1953
+      // ======================================================================
+      function triggerSVGDownload(filename, svgContent) {
+        const blob = new Blob([svgContent], {
+          type: 'image/svg+xml;charset=utf-8',
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
+      function downloadPhase3EvidenceSVG() {
+        const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <g id="FUNDO_ARQUIVO">
+    <rect width="800" height="600" fill="#0f172a"/>
+    <rect x="30" y="30" width="740" height="540" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8 4"/>
+  </g>
+  <g id="MANIFESTO_OCULTO" opacity="0.06">
+    <rect x="110" y="150" width="580" height="300" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="4"/>
+    <text x="400" y="210" fill="#1e293b" font-family="Courier New, monospace" font-weight="bold" font-size="20" text-anchor="middle">CAMADA REAL DESBLOQUEADA! MUDE A COR DESTE TEXTO!</text>
+    <text x="400" y="248" fill="#1e293b" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">"Metodologia Científica e Semiótica" — Hochschule für Gestaltung</text>
+    <g id="BLOCO_SENHA_INVERTIDO_180" transform="rotate(180 400 345)">
+      <rect x="210" y="310" width="380" height="70" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="3"/>
+      <text x="400" y="355" fill="#1e293b" font-family="Courier New, monospace" font-weight="bold" font-size="36" letter-spacing="4" text-anchor="middle">ULM1953</text>
+    </g>
+  </g>
+  <g id="ISCA_01_FALSO_CODIGO">
+    <rect x="130" y="180" width="540" height="240" rx="10" fill="#1e1b4b" stroke="#6366f1" stroke-width="4"/>
+    <text x="400" y="255" fill="#a5b4fc" font-family="Courier New, monospace" font-weight="bold" font-size="20" text-anchor="middle">ARMADILHA DO FALSIFICADOR (ISCA 01)</text>
+    <text x="400" y="305" fill="#f43f5e" font-family="Courier New, monospace" font-weight="bold" font-size="34" text-anchor="middle">BAUHAUS0000</text>
+    <text x="400" y="355" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">Esta senha é falsa e descontará 5% de reputação. Oculte esta camada!</text>
+  </g>
+  <g id="BLOQUEIO_VERMELHO_PROPAGANDA">
+    <rect x="70" y="90" width="660" height="420" fill="#dc2626"/>
+    <polygon points="70,90 730,90 730,510" fill="#b91c1c"/>
+    <rect x="120" y="180" width="560" height="240" fill="#18181b" stroke="#facc15" stroke-width="6"/>
+    <text x="400" y="265" fill="#facc15" font-family="Impact, Arial Black, sans-serif" font-size="42" letter-spacing="2" text-anchor="middle">COMPRE SEM PENSAR!</text>
+    <text x="400" y="315" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold" font-size="20" text-anchor="middle">CAMADA DE BLOQUEIO PUBLICITÁRIO ATIVA</text>
+    <text x="400" y="365" fill="#fca5a5" font-family="Courier New, monospace" font-size="14" text-anchor="middle">[INSPECIONE TODAS AS CAMADAS NO AFFINITY OU FIGMA]</text>
+  </g>
+</svg>`;
+        triggerSVGDownload('evidencia_fase3_camadas.svg', svgContent);
+        showToast(
+          'Arquivo avançado evidencia_fase3_camadas.svg baixado! Manipule camadas, opacidade, cor e rotação.',
+          true,
+        );
+      }
+
+      function checkPhase3() {
+        const answer = normalizeText(
+          document.getElementById('pass-phase-3').value,
+        ).replace(/\s+/g, '');
+        if (answer === 'ULM1953') {
+          registerUnlockedKey('F3: ULM1953');
+          showToast(
+            'DESCRIPTOGRAFIA CONCLUÍDA (ULM1953)! Avançando para Fase 04...',
+            true,
+          );
+          goToScreen(4);
+        } else if (answer === 'BAUHAUS0000') {
+          penalizeReputation(
+            5,
+            'VOCÊ CAIU NA ISCA! BAUHAUS0000 é a camada armadilha. Continue investigando',
+          );
+        } else {
+          penalizeReputation(
+            5,
+            'Código incorreto! Oculte as camadas superiores, suba a opacidade para 100% e rotacione 180°',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 4: AUDITORIA TÉCNICA AVANÇADA NO AFFINITY / FIGMA -> 6475
+      // ======================================================================
+      function downloadPhase4EvidenceSVG() {
+        const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <g id="FUNDO_PAPEL">
+    <rect width="800" height="1000" fill="#f8fafc"/>
+  </g>
+  <g id="MODULOS_HORIZONTAIS">
+    <rect id="MODULO_01" x="40" y="40" width="720" height="170" fill="#e2e8f0"/>
+    <rect id="MODULO_02" x="40" y="230" width="720" height="170" fill="#cbd5e1"/>
+    <rect id="MODULO_03_DESTAQUE" x="40" y="420" width="720" height="200" fill="#1D3557"/>
+    <rect id="MODULO_04" x="40" y="640" width="720" height="150" fill="#e2e8f0"/>
+    <rect id="MODULO_05" x="40" y="810" width="720" height="150" fill="#94a3b8"/>
+  </g>
+  <g id="TIPOGRAFIA_AUDITORIA">
+    <text id="TITULO_PRINCIPAL" x="60" y="148" fill="#0f172a" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="84">FORMA E FUNÇÃO</text>
+    <text id="SUBTITULO_AUDITORIA" x="60" y="325" fill="#1e293b" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="26">SISTEMA MODULAR • ESTILO TIPOGRÁFICO INTERNACIONAL</text>
+    <text id="TEXTO_BLOCO_AZUL" x="60" y="530" fill="#f8fafc" font-family="Helvetica, Arial, sans-serif" font-size="22">AUDITORIA TÉCNICA: USE O CONTA-GOTAS E O PAINEL CARACTERE</text>
+    <text id="RODAPE_AUDITORIA" x="60" y="895" fill="#0f172a" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20">HOCHSCHULE FÜR GESTALTUNG ULM • ARQUIVO PERICIAL</text>
+  </g>
+  <g id="GUIAS_GRID" opacity="0.65">
+    <rect id="COL_01" x="40" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect id="COL_02" x="163" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect id="COL_03" x="286" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect id="COL_04" x="409" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect id="COL_05" x="532" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect id="COL_06" x="655" y="20" width="105" height="960" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="6 4"/>
+  </g>
+  <g id="RUIDO_SOBREPOSTO">
+    <polygon points="100,120 700,260 640,860 140,740" fill="#ef4444" opacity="0.88"/>
+    <text x="400" y="500" fill="#ffffff" font-family="Impact, sans-serif" font-size="38" text-anchor="middle" transform="rotate(-18 400 500)">OCULTE A CAMADA RUIDO_SOBREPOSTO!</text>
+  </g>
+</svg>`;
+        triggerSVGDownload('evidencia_fase4_grid_suico.svg', svgContent);
+        showToast(
+          'Arquivo avançado evidencia_fase4_grid_suico.svg baixado! Remova o ruído e audite as propriedades.',
+          true,
+        );
+      }
+
+      function validateSoftwareSpecs() {
+        const s1 = document.getElementById('spec-1').value.trim();
+        const s2 = document.getElementById('spec-2').value.trim();
+        const s3 = document.getElementById('spec-3').value.trim();
+        const s4 = document.getElementById('spec-4').value.trim();
+
+        if (s1 === '6' && s2 === '4' && s3 === '7' && s4 === '5') {
+          document
+            .getElementById('phase4-password-banner')
+            .classList.add('visible');
+          showToast(
+            'Auditoria técnica validada! Código compilado: 6475.',
+            true,
+          );
+        } else {
+          penalizeReputation(
+            5,
+            'Uma ou mais medições técnicas estão incorretas! Confira cada grupo no painel Camadas',
+          );
+        }
+      }
+
+      function checkPhase4() {
+        const answer = document
+          .getElementById('pass-phase-4')
+          .value.replace(/\s+/g, '');
+        if (answer === '6475') {
+          registerUnlockedKey('F4: 6475');
+          showToast('CÓDIGO 6475 VALIDADO! Abrindo Dossiê Brasil...', true);
+          goToScreen(5);
+        } else {
+          penalizeReputation(
+            5,
+            'Código de 4 dígitos incorreto! Realize a auditoria completa no Affinity/Figma',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 5: DOSSIÊ BRASIL -> TROPICALIA
+      // ======================================================================
+      function validateBrazilQuiz() {
+        const q1 = document.getElementById('br-q1').value;
+        const q2 = document.getElementById('br-q2').value;
+        const q3 = document.getElementById('br-q3').value;
+        const q4 = document.getElementById('br-q4').value;
+
+        if (
+          q1 === 'correct' &&
+          q2 === 'correct' &&
+          q3 === 'correct' &&
+          q4 === 'correct'
+        ) {
+          document
+            .getElementById('phase5-password-banner')
+            .classList.add('visible');
+          showToast(
+            'Dossiê Brasil aprovado! Chave revelada: TROPICÁLIA.',
+            true,
+          );
+        } else {
+          penalizeReputation(
+            5,
+            'Uma ou mais respostas sobre o Design Brasileiro estão incorretas',
+          );
+        }
+      }
+
+      function checkPhase5() {
+        const q1 = document.getElementById('br-q1').value;
+        const q2 = document.getElementById('br-q2').value;
+        const q3 = document.getElementById('br-q3').value;
+        const q4 = document.getElementById('br-q4').value;
+
+        if (
+          q1 !== 'correct' ||
+          q2 !== 'correct' ||
+          q3 !== 'correct' ||
+          q4 !== 'correct'
+        ) {
+          penalizeReputation(
+            5,
+            'Acerte as 4 questões interpretativas do Dossiê Brasil primeiro',
+          );
+          return;
+        }
+
+        const answer = normalizeText(
+          document.getElementById('pass-phase-5').value,
+        );
+        if (answer === 'TROPICALIA') {
+          registerUnlockedKey('F5: TROPICÁLIA');
+          showToast('FASE 05 CONCLUÍDA! Entrando na Sala de Autópsia...', true);
+          goToScreen(6);
+        } else {
+          penalizeReputation(
+            5,
+            'Chave incorreta! Clique em "Validar Dossiê Brasil" acima',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 6: AUTÓPSIA FORENSE (6 HOTSPOTS + QUIZ 4 QUESTÕES -> ETICA)
+      // ======================================================================
+      const hotspotDiagnostics = {
+        1: '<strong>[01 — SELO VERDE FALSO SEM CERTIFICAÇÃO]</strong><br>Selo decorativo inventado para simular compromisso ecológico inexistente (<em>Greenwashing</em>).',
+        2: '<strong>[02 — CONFLITO TIPOGRÁFICO E FALTA DE HIERARQUIA]</strong><br>Mistura desordenada de 3 famílias tipográficas sem contraste funcional, confundindo o leitor.',
+        3: '<strong>[03 — VIOLAÇÃO DE GRID E ALINHAMENTO]</strong><br>Caixas inclinadas e estrela de oferta poluindo o espaço visual e destruindo a malha de leitura.',
+        4: '<strong>[04 — ILUSTRAÇÃO PSEUDO-ARTESANAL]</strong><br>Estética que simula "feito à mão" para mascarar produção industrial rápida e descartável.',
+        5: '<strong>[05 — BOTÃO ENGANOSO DE FALSA ESCASSEZ]</strong><br>Cronômetro falso ("expira em 00:19s") para induzir compras por impulso sem reflexão crítica.',
+        6: '<strong>[06 — LETRAS MIÚDAS ILEGÍVEIS (DARK PATTERN)]</strong><br>Texto cinza-claro minúsculo escondendo assinatura mensal oculta e oficinas sem auditoria trabalhista.',
+      };
+
+      function inspectHotspot(id) {
+        gameState.inspectedHotspots.add(id);
+        const btn = document.getElementById(`hs-${id}`);
+        if (btn) btn.classList.add('checked');
+        const diagEl = document.getElementById(`diag-${id}`);
+        if (diagEl) {
+          diagEl.innerHTML = hotspotDiagnostics[id];
+          diagEl.classList.add('unlocked');
+        }
+        const countEl = document.getElementById('hotspot-count');
+        if (countEl) countEl.textContent = gameState.inspectedHotspots.size;
+
+        if (gameState.inspectedHotspots.size === 6) {
+          document.getElementById('autopsy-quiz-box').classList.add('visible');
+          showToast(
+            'Todas as 6 miras mapeadas! Responda ao Quiz Diagnóstico abaixo.',
+            true,
+          );
+        }
+      }
+
+      function validateAutopsyQuiz() {
+        const q1 = document.getElementById('q-autopsy-1').value;
+        const q2 = document.getElementById('q-autopsy-2').value;
+        const q3 = document.getElementById('q-autopsy-3').value;
+        const q4 = document.getElementById('q-autopsy-4').value;
+
+        if (
+          q1 === 'correct' &&
+          q2 === 'correct' &&
+          q3 === 'correct' &&
+          q4 === 'correct'
+        ) {
+          document
+            .getElementById('phase6-password-banner')
+            .classList.add('visible');
+          showToast('Quiz Diagnóstico aprovado! Chave revelada: ÉTICA.', true);
+        } else {
+          penalizeReputation(
+            5,
+            'Uma ou mais respostas do Quiz Diagnóstico estão incorretas',
+          );
+        }
+      }
+
+      function checkPhase6() {
+        if (gameState.inspectedHotspots.size < 6) {
+          showToast(
+            `AUTÓPSIA INCOMPLETA: Clique nas 6 miras da peça (${gameState.inspectedHotspots.size}/6).`,
+            false,
+          );
+          return;
+        }
+
+        const q1 = document.getElementById('q-autopsy-1').value;
+        const q2 = document.getElementById('q-autopsy-2').value;
+        const q3 = document.getElementById('q-autopsy-3').value;
+        const q4 = document.getElementById('q-autopsy-4').value;
+
+        if (
+          q1 !== 'correct' ||
+          q2 !== 'correct' ||
+          q3 !== 'correct' ||
+          q4 !== 'correct'
+        ) {
+          penalizeReputation(
+            5,
+            'Acerte as 4 questões do Quiz Diagnóstico primeiro',
+          );
+          return;
+        }
+
+        const answer = normalizeText(
+          document.getElementById('pass-phase-6').value,
+        );
+        if (answer === 'ETICA') {
+          registerUnlockedKey('F6: ÉTICA');
+          showToast(
+            'FASE 06 CONCLUÍDA! Avançando para o Tribunal Final...',
+            true,
+          );
+          goToScreen(7);
+        } else {
+          penalizeReputation(
+            5,
+            'Chave incorreta! Valide o Quiz Diagnóstico para revelar a chave',
+          );
+        }
+      }
+
+      // ======================================================================
+      // FASE 7: TRIBUNAL DO DESIGN & EMISSÃO DO LAUDO OFICIAL
+      // ======================================================================
+      function generateOfficialReport() {
+        const selectedOption = document.querySelector(
+          'input[name="ethical-dilemma"]:checked',
+        );
+        const verdictText = document
+          .getElementById('final-report-text')
+          .value.trim();
+
+        if (!selectedOption || selectedOption.value !== 'ethical') {
+          penalizeReputation(
+            5,
+            'Postura ética incorreta! Reavalie o dilema profissional',
+          );
+          return;
+        }
+
+        if (verdictText.length < 80) {
+          showToast(
+            `PARECER INSUFICIENTE: Escreva pelo menos 80 caracteres (atual: ${verdictText.length}).`,
+            false,
+          );
+          return;
+        }
+
+        clearInterval(gameState.timerInterval);
+        gameState.timerRunning = false;
+
+        const remMins = Math.floor(gameState.remainingSeconds / 60);
+        const remSecs = gameState.remainingSeconds % 60;
+
+        document.getElementById('cert-team-name').textContent =
+          gameState.teamName;
+        document.getElementById('cert-time-remaining').textContent =
+          `${String(remMins).padStart(2, '0')}:${String(remSecs).padStart(2, '0')}`;
+        document.getElementById('cert-reputation').textContent =
+          `${gameState.reputation}%`;
+        document.getElementById('cert-verdict-body').textContent =
+          `"${verdictText}"`;
+
+        const certBox = document.getElementById('certificate-box');
+        certBox.classList.add('visible');
+        showToast(
+          'Laudo Pericial Oficial emitido! Use "IMPRIMIR / SALVAR PDF" para entregar.',
+          true,
+        );
+        certBox.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // ======================================================================
+      // INICIALIZAÇÃO GARANTIDA APÓS DOMContentLoaded
+      // ======================================================================
+      document.addEventListener('DOMContentLoaded', () => {
+        renderPhase1Thumbnails();
+
+        const btnStart = document.getElementById('btn-start-game');
+        const teamInput = document.getElementById('team-name-input');
+        const teamErrorMsg = document.getElementById('team-error-msg');
+        const btnToggle = document.getElementById('btn-toggle-timer');
+        const btnReset = document.getElementById('btn-reset-timer');
+        const reportTextarea = document.getElementById('final-report-text');
+        const charCounter = document.getElementById('char-counter');
+
+        if (teamInput) {
+          teamInput.addEventListener('input', () => {
+            teamInput.classList.remove('input-error');
+            if (teamErrorMsg) teamErrorMsg.classList.remove('visible');
+          });
+        }
+
+        if (btnStart) {
+          btnStart.addEventListener('click', () => {
+            const nameValue = teamInput ? teamInput.value.trim() : '';
+            if (!nameValue) {
+              if (teamInput) {
+                teamInput.classList.add('input-error');
+                teamInput.focus();
+              }
+              if (teamErrorMsg) teamErrorMsg.classList.add('visible');
+              showToast(
+                'REGISTRO OBRIGATÓRIO: Preencha o nome da equipe e dos integrantes.',
+                false,
+              );
+              return;
+            }
+
+            gameState.teamName = nameValue;
+            const hudTeam = document.getElementById('hud-team-display');
+            if (hudTeam)
+              hudTeam.textContent = `EQUIPE: ${gameState.teamName.toUpperCase()}`;
+
+            startTimer();
+            goToScreen(1);
+            showToast('Arquivo aberto! Cronômetro de 100:00 iniciado.', true);
+          });
+        }
+
+        if (btnToggle) btnToggle.addEventListener('click', toggleTimer);
+        if (btnReset) btnReset.addEventListener('click', resetTimer);
+
+        if (reportTextarea && charCounter) {
+          reportTextarea.addEventListener('input', () => {
+            charCounter.textContent = reportTextarea.value.length;
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
